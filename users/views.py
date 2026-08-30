@@ -4,7 +4,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
-from .serializers import LoginSerializer, RegisterSerializer, UserSerializer, AdminUserSerializer, PasswordResetRequestSerializer, PasswordResetConfirmSerializer
+from .serializers import LoginSerializer, RegisterSerializer, UserSerializer, AdminUserSerializer, PasswordResetRequestSerializer, PasswordResetConfirmSerializer, AdminRegisterSerializer
 from .models import User
 
 
@@ -118,3 +118,20 @@ class PasswordResetConfirmView(APIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response({'detail': 'Contraseña actualizada correctamente.'}, status=status.HTTP_200_OK)
+
+
+class AdminRegisterView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        serializer = AdminRegisterSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+        user.role = 'admin'
+        user.save()
+        refresh = RefreshToken.for_user(user)
+        return Response({
+            'user': UserSerializer(user).data,
+            'access': str(refresh.access_token),
+            'refresh': str(refresh),
+        }, status=status.HTTP_201_CREATED)

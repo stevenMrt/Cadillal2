@@ -93,14 +93,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # -----------------------------------------------------------------------------
 # Database
 # -----------------------------------------------------------------------------
-if DEBUG:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
-    }
-else:
+if config('DB_HOST', default=''):
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
@@ -110,6 +103,13 @@ else:
             'HOST': config('DB_HOST'),
             'PORT': config('DB_PORT', default='5432'),
             'OPTIONS': {'sslmode': config('DB_SSLMODE', default='require')},
+        }
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
 

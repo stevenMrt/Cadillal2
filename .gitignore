@@ -1,6 +1,9 @@
 # Entorno y secretos
 .env
-.env.*
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 *.env
 
 # Python
@@ -31,6 +34,9 @@ test_receipt.txt
 .idea/
 .vscode/
 *.iml
+
+# Kilo
+.kilo/
 
 # Sistema
 .DS_Store

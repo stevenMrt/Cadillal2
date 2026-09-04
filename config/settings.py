@@ -7,15 +7,16 @@ from decouple import config
 import os
 import logging
 import sys
+from django.core.exceptions import ImproperlyConfigured
 
 # -----------------------------------------------------------------------------
 # Core
 # -----------------------------------------------------------------------------
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = config('SECRET_KEY', default='')
+SECRET_KEY = config('SECRET_KEY')
 if not SECRET_KEY:
-    SECRET_KEY = 'dev-secret-key-change-in-production'
+    raise ImproperlyConfigured('SECRET_KEY environment variable is required in production.')
 
 DEBUG = config('DEBUG', default=True, cast=bool)
 
@@ -24,8 +25,6 @@ ALLOWED_HOSTS = [
     for host in config('ALLOWED_HOSTS', default='localhost,127.0.0.1').split(',')
     if host.strip()
 ]
-if 'cadillal.onrender.com' not in ALLOWED_HOSTS:
-    ALLOWED_HOSTS.append('cadillal.onrender.com')
 
 # -----------------------------------------------------------------------------
 # Applications
@@ -117,7 +116,23 @@ else:
 # -----------------------------------------------------------------------------
 # Password validation
 # -----------------------------------------------------------------------------
-AUTH_PASSWORD_VALIDATORS = []
+AUTH_PASSWORD_VALIDATORS = [
+    {
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {
+            'min_length': 8,
+        }
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
+]
 
 # -----------------------------------------------------------------------------
 # Internationalization

@@ -4,6 +4,7 @@ Django settings for config project.
 
 from pathlib import Path
 from decouple import config
+from dotenv import load_dotenv
 import os
 import logging
 import sys
@@ -13,6 +14,7 @@ from django.core.exceptions import ImproperlyConfigured
 # Core
 # -----------------------------------------------------------------------------
 BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(BASE_DIR / '.env')
 
 SECRET_KEY = config('SECRET_KEY')
 if not SECRET_KEY:

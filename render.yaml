@@ -17,9 +17,9 @@ services:
       - key: DB_NAME
         value: neondb
       - key: DB_USER
-        value: stevenmartinez
+        value: neondb_owner
       - key: DB_PASSWORD
-        value: npg_GzJwTe8oWV0y
+        generateValue: true
       - key: DB_HOST
         value: ep-wispy-cell-ay3uv4fv-pooler.c-5.us-east-2.aws.neon.tech
       - key: DB_PORT

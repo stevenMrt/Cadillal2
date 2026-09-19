@@ -186,20 +186,24 @@ SIMPLE_JWT = {
 # -----------------------------------------------------------------------------
 # CORS
 # -----------------------------------------------------------------------------
-if DEBUG:
-    CORS_ALLOW_ALL_ORIGINS = True
-    CORS_ALLOWED_ORIGINS = []
-else:
-    CORS_ALLOW_ALL_ORIGINS = False
-    CORS_ALLOWED_ORIGINS = [
-        origin.strip()
-        for origin in config(
-            'CORS_ALLOWED_ORIGINS',
-            default='https://tu-frontend.com'
-        ).split(',')
-        if origin.strip()
-    ]
+CORS_ALLOW_ALL_ORIGINS = config('CORS_ALLOW_ALL_ORIGINS', default=True, cast=bool)
 CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r"^http://localhost:\d+$",
+    r"^http://127\.0\.0\.1:\d+$",
+    r"^https://.*\.github\.io$",
+    r"^https://.*\.onrender\.com$",
+]
+
+CORS_ALLOWED_ORIGINS = [
+    origin.strip()
+    for origin in config(
+        'CORS_ALLOWED_ORIGINS',
+        default='https://stevenmrt.github.io,https://cadillal-flutter.onrender.com'
+    ).split(',')
+    if origin.strip()
+]
 
 # -----------------------------------------------------------------------------
 # Email
